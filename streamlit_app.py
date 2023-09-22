@@ -49,7 +49,7 @@ df_month = pd.concat([df_june, df_july, df_aug], ignore_index=True)
 
 
 # Load June vehicles data
-june_vehicles_file_path = r"D:\Hopcharge Update\Vehicles-Daily-Report-01-Jun-2023-12-00-AM-to-30-Jun-2023-11-59-PM.xlsx - Vehicle Daily Report (1).csv"
+june_vehicles_file_path = r"KM Data/Vehicles-Daily-Report-01-Jun-2023-12-00-AM-to-30-Jun-2023-11-59-PM.xlsx - Vehicle Daily Report.csv"
 df_vehicles_june = pd.DataFrame(load_monthly_data(june_vehicles_file_path))
 
 # Load July vehicles data
