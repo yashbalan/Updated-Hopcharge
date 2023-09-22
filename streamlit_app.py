@@ -57,7 +57,7 @@ july_vehicles_file_path = r"KM Data/Vehicles-Daily-Report-01-Jul-2023-12-00-AM-t
 df_vehicles_july = pd.DataFrame(load_monthly_data(july_vehicles_file_path))
 
 # Load August vehicles data
-aug_vehicles_file_path = r"D:\Hopcharge Update\Vehicles-Daily-Report-01-Aug-2023-12-00-AM-to-31-Aug-2023-11-59-PM.csv"
+aug_vehicles_file_path = r"KM Data/Vehicles-Daily-Report-01-Aug-2023-12-00-AM-to-31-Aug-2023-11-59-PM.csv"
 df_vehicles_aug = pd.DataFrame(load_monthly_data(aug_vehicles_file_path))
 
 # Concatenate June and July data for df_vehicles_month
