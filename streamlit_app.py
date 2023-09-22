@@ -26,11 +26,11 @@ def load_monthly_data(file_path):
     return pd.read_csv(file_path, encoding='latin1')
 
 # Load June data
-june_file_path = r"D:\Hopcharge Update\June Roundtable data.xlsx - Round table (1).csv"
+june_file_path = r"Roundtable Data/June Roundtable data.xlsx - Round table.csv"
 df_june = pd.DataFrame(load_monthly_data(june_file_path))
 
 # Load July data
-july_file_path = r"C:\Users\DELL\Downloads\Roundtable july1 (2).csv"
+july_file_path = r"Roundtable Data/Roundtable july1 (2).csv"
 df_july = pd.DataFrame(load_monthly_data(july_file_path))
 # Drop rows without a 'uid'
 df_july.dropna(subset=['uid'], inplace=True)
@@ -38,7 +38,7 @@ df_july.dropna(subset=['uid'], inplace=True)
 #df_july.to_csv("julydata.csv", index=False)
 
 # Load August data
-aug_file_path = r"D:\Hopcharge Update\August Roundtable.csv"
+aug_file_path = r"Roundtable Data/August Roundtable.csv"
 df_aug = pd.DataFrame(load_monthly_data(aug_file_path))
 # Drop rows without a 'uid'
 df_aug.dropna(subset=['uid'], inplace=True)
@@ -455,7 +455,7 @@ vehicle_df.to_csv('melted.csv')
 
 #merged_df.to_csv(r"C:\Users\DELL\PycharmProjects\Excel\merdf2.csv")
 
-image = Image.open(r'C:\Users\DELL\Downloads\CustomerboardHop\customerboard\Hpcharge.png')
+image = Image.open(r'Hpcharge.png')
 col1, col2, col3, col4, col5 = st.columns(5)
 col3.image(image, use_column_width=False)
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
