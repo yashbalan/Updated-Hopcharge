@@ -15,7 +15,7 @@ from folium import plugins
 
 
 df1 = pd.DataFrame(pd.read_csv(
-    r'D:\Hopcharge Update\Ops_Session_Data (1).csv', encoding='latin1'))
+    r'May Data/Ops_Session_Data.csv', encoding='latin1'))
 df2 = pd.DataFrame(pd.read_csv(
     r'D:\Hopcharge Update\past_bookings_May23 (3).csv', encoding='latin1'))
 
