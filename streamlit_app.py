@@ -38,7 +38,7 @@ df_july.dropna(subset=['uid'], inplace=True)
 #df_july.to_csv("julydata.csv", index=False)
 
 # Load August data
-aug_file_path = r"Roundtable Data/August Roundtable (1).csv"
+aug_file_path = r"Roundtable Data/August Roundtable.csv"
 df_aug = pd.DataFrame(load_monthly_data(aug_file_path))
 # Drop rows without a 'uid'
 df_aug.dropna(subset=['uid'], inplace=True)
@@ -324,7 +324,7 @@ df_month = df_month.drop_duplicates(subset="uid", keep="first")
 
 df_month = df_month.reset_index(drop=True)
 
-
+#df_month.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\myself.csv")
 
 grouped_df = merged_df.groupby("uid").agg(
     {"Actual SoC_Start": "min", "Actual Soc_End": "max"}).reset_index()
@@ -455,7 +455,7 @@ vehicle_df.to_csv('melted.csv')
 
 #merged_df.to_csv(r"C:\Users\DELL\PycharmProjects\Excel\merdf2.csv")
 
-image = Image.open(r'Hpcharge.png')
+image = Image.open(r'C:\Users\DELL\Downloads\CustomerboardHop\customerboard\Hpcharge.png')
 col1, col2, col3, col4, col5 = st.columns(5)
 col3.image(image, use_column_width=False)
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
