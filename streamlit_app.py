@@ -314,7 +314,7 @@ df_month['Actual Date'] = df_month['Reach Date'].fillna('') + df_month['Reach da
 # Drop the individual "Reach Date" and "Reach date" columns
 df_month.drop(columns=['Reach Date', 'Reach date', 'Aug Reach Date'], inplace=True)
 
-df_month['E-pod Arrival Time @ Session location'] = df_month['Reach Time'].fillna('').astype(str) + df_month['Arrival Time'].fillna('').astype(str) + df_month['Aug Reach Time'].fillna('').astype(str)
+df_month['E-pod Arrival Time @ Session location'] = df_month['Reach time'].fillna('').astype(str) + df_month['Arrival Time'].fillna('').astype(str) + df_month['Aug Reach Time'].fillna('').astype(str)
 
 
 # Drop rows without a 'uid'
