@@ -43,9 +43,15 @@ df_aug = pd.DataFrame(load_monthly_data(aug_file_path))
 # Drop rows without a 'uid'
 df_aug.dropna(subset=['uid'], inplace=True)
 
+# Load November data
+nov_file_path = r"C:\Users\DELL\Downloads\past_bookings_Nov23 (1).csv"
+df_nov = pd.DataFrame(load_monthly_data(nov_file_path))
+# Drop rows without a 'uid'
+df_nov.dropna(subset=['uid'], inplace=True)
+
 
 # Concatenate June and July data for df_month
-df_month = pd.concat([df_june, df_july, df_aug], ignore_index=True)
+df_month = pd.concat([df_june, df_july, df_aug, df_nov], ignore_index=True)
 
 
 # Load June vehicles data
@@ -61,14 +67,11 @@ aug_vehicles_file_path = r"KM Data/Vehicles-Daily-Report-01-Aug-2023-12-00-AM-to
 df_vehicles_aug = pd.DataFrame(load_monthly_data(aug_vehicles_file_path))
 
 # Load August vehicles data
-nov_vehicles_file_path = r""
+nov_vehicles_file_path = r"KM Data/Vehicles-Daily-Report-01-Nov-2023-12-00-AM-to-30-Nov-2023-11-59-PM (5).csv"
 df_vehicles_nov = pd.DataFrame(load_monthly_data(nov_vehicles_file_path))
 
 # Concatenate June and July data for df_vehicles_month
 df_vehicles_month = pd.concat([df_vehicles_june, df_vehicles_july, df_vehicles_aug, df_vehicles_nov], ignore_index=True)
-
-# Concatenate June and July data for df_vehicles_month
-df_vehicles_month = pd.concat([df_vehicles_june, df_vehicles_july, df_vehicles_aug], ignore_index=True)
 
 #df_vehicles_month.to_csv("hjklo.csv", index=False)
 
@@ -133,7 +136,7 @@ df_month['updated'] = pd.to_datetime(
 df_month['fromTime'] = pd.to_datetime(
     df_month['fromTime'], format='mixed')
 df_month['Reach Time'] = pd.to_datetime(
-    df_month['Reach Time'], format='mixed')
+    df_month['Reach Time'], format='mixed', errors='coerce')
 
 
 df1["KM Travelled for Session"] = df1["KM Travelled for Session"].str.replace(
@@ -316,12 +319,12 @@ df_month = df_month.rename(
 #df_month['EPOD Name'] = df_month['EPOD Name'].fillna('EPOD012')
 
 # Concatenate "Reach Date" and "Reach date" columns into "Actual Date"
-df_month['Actual Date'] = df_month['Reach Date'].fillna('') + df_month['Reach date'].fillna('') + df_month['Aug Reach Date'].fillna('')
+df_month['Actual Date'] = df_month['Reach Date'].fillna('') + df_month['Reach date'].fillna('') + df_month['Aug Reach Date'].fillna('') + df_month['Nov Reach Date'].fillna('')
 
 # Drop the individual "Reach Date" and "Reach date" columns
 df_month.drop(columns=['Reach Date', 'Reach date', 'Aug Reach Date'], inplace=True)
 
-df_month['E-pod Arrival Time @ Session location'] = df_month['Reach time'].fillna('').astype(str) + df_month['Arrival Time'].fillna('').astype(str) + df_month['Aug Reach Time'].fillna('').astype(str)
+df_month['E-pod Arrival Time @ Session location'] = df_month['Reach time'].fillna('').astype(str) + df_month['Arrival Time'].fillna('').astype(str) + df_month['Aug Reach Time'].fillna('').astype(str) + df_month['Nov Reach Time'].fillna('').astype(str)
 
 
 # Drop rows without a 'uid'
