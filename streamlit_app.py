@@ -916,6 +916,8 @@ with tab1:
         with col8:
             st.plotly_chart(city_end_soc_median_gauge)
 
+        #filtered_df.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\vihop.csv")
+
 with tab2:
     CustomerNames = df['Customer Name'].unique()
     SubscriptionNames = df['type'].unique()
