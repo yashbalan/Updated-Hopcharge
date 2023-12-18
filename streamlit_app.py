@@ -44,7 +44,7 @@ df_aug = pd.DataFrame(load_monthly_data(aug_file_path))
 df_aug.dropna(subset=['uid'], inplace=True)
 
 # Load November data
-nov_file_path = r"C:\Users\DELL\Downloads\past_bookings_Nov23 (1).csv"
+nov_file_path = r"Roundtable Data/past_bookings_Nov23 (1).csv"
 df_nov = pd.DataFrame(load_monthly_data(nov_file_path))
 # Drop rows without a 'uid'
 df_nov.dropna(subset=['uid'], inplace=True)
