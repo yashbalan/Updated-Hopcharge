@@ -75,6 +75,22 @@ df_vehicles_month = pd.concat([df_vehicles_june, df_vehicles_july, df_vehicles_a
 
 #df_vehicles_month.to_csv("hjklo.csv", index=False)
 
+# Load June vehicles data
+june_subs_file_path = r"C:\Users\DELL\Downloads\possible_subscribers_Jun23.csv"
+df_subs_june = pd.DataFrame(load_monthly_data(june_subs_file_path))
+
+# Load July vehicles data
+july_subs_file_path = r"C:\Users\DELL\Downloads\possible_subscribers_Jul23.csv"
+df_subs_july = pd.DataFrame(load_monthly_data(july_subs_file_path))
+
+# Load August vehicles data
+aug_subs_file_path = r"C:\Users\DELL\Downloads\possible_subscribers_Aug23.csv"
+df_subs_aug = pd.DataFrame(load_monthly_data(aug_subs_file_path))
+
+# Load August vehicles data
+nov_subs_file_path = r"C:\Users\DELL\Downloads\possible_subscribers_Nov23.csv"
+df_subs_nov = pd.DataFrame(load_monthly_data(nov_subs_file_path))
+
 # Concatenate June and July data for df_vehicles_month
 df_subs_month = pd.concat([df_subs_june, df_subs_july, df_subs_aug, df_subs_nov], ignore_index=True)
 
