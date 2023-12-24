@@ -75,6 +75,9 @@ df_vehicles_month = pd.concat([df_vehicles_june, df_vehicles_july, df_vehicles_a
 
 #df_vehicles_month.to_csv("hjklo.csv", index=False)
 
+# Concatenate June and July data for df_vehicles_month
+df_subs_month = pd.concat([df_subs_june, df_subs_july, df_subs_aug, df_subs_nov], ignore_index=True)
+
 def load_rank_data(file_path):
     return pd.read_csv(file_path, encoding='latin1')
 
@@ -303,9 +306,11 @@ df_month = check_booking_time(df_month)
 
 df3.set_index('uid', inplace=True)
 
+df_subs_month.set_index('uid', inplace=True)
+
 
 merged_df = merged_df.join(df3['type'], on='location.user_id_x')
-df_month = df_month.join(df3['type'], on='location.user_id')
+df_month = df_month.join(df_subs_month['type'], on='location.user_id')
 df_month = df_month.rename(columns={'E-pod No.': 'Number'})
 df_month['Number'] = df_month['Number'].astype(str)
 df_month = df_month.merge(
