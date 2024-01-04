@@ -1500,7 +1500,7 @@ with tab3:
     average_kms = filtered_data_vehicle.groupby('EPOD Name')['KM Travelled for Session'].mean().reset_index().round(1)
 
     # Calculate average kilometers per session across all EPods
-    avgkm = average_kms['KM Travelled for Session'].mean().round(2)
+    avgkm = round(average_kms['KM Travelled for Session'].mean(), 2)
 
     # Display Average Kms/EPod
     with col4:
@@ -1775,12 +1775,12 @@ with tab3:
             1)
 
         # Calculate average kilometers per session across all EPods
-        avgkm = average_kms['KM Travelled for Session'].mean().round(2)
+        avgkm = round(average_kms['KM Travelled for Session'].mean(), 2)
 
         with col4:
             st.markdown("Average Kms/EPod per Session")
             st.markdown("<span style='font-size: 25px;line-height: 0.8;'>" +
-                        str(average_kms['KM Travelled for Session'].mean().round(2)) + "</span>", unsafe_allow_html=True)
+                        str(round(average_kms['KM Travelled for Session'].mean(),2)) + "</span>", unsafe_allow_html=True)
 
         filtered_data['KWH Pumped Per Session'] = filtered_data['KWH Pumped Per Session'].replace(
             '', np.nan)
