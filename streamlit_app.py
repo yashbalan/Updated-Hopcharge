@@ -1499,6 +1499,8 @@ with tab3:
     # Calculate average kilometers per session across all EPods
     avgkm = average_kms['KM Travelled for Session'].mean().round(2)
 
+    Subs_Data = filtered_data.copy()
+
     #filtered_data.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\Datavehocle.csv")
 
     # Display Average Kms/EPod
@@ -2115,14 +2117,15 @@ with tab5:
             st.write("\n")
 
 
+
 with tab6:
     # UI for selecting date range, Customers, and Subscriptions
     col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 
     with col1:
-        df['Actual Date'] = pd.to_datetime(df['Actual Date'], errors='coerce')
-        min_date = df['Actual Date'].min().date()
-        max_date = df['Actual Date'].max().date()
+        Subs_Data['Actual Date'] = pd.to_datetime(Subs_Data['Actual Date'], errors='coerce')
+        min_date = Subs_Data['Actual Date'].min().date()
+        max_date = Subs_Data['Actual Date'].max().date()
         start_date = st.date_input(
             'Start Date', min_value=min_date, max_value=max_date, value=min_date, key="cpi-date-start-input")
 
@@ -2133,88 +2136,133 @@ with tab6:
     with col4:
         selected_customers = st.multiselect(
             label='Select Customers',
-            options=['All'] + df['Customer Name'].unique().tolist(),
+            options=['All'] + Subs_Data['Customer Name'].unique().tolist(),
             default='All'
         )
 
     with col3:
         selected_subscriptions = st.multiselect(
             label='Select Subscription',
-            options=['All'] + df['type'].unique().tolist(),
+            options=['All'] + Subs_Data['type'].unique().tolist(),
             default='All'
         )
 
     start_date = pd.to_datetime(start_date)
     end_date = pd.to_datetime(end_date)
-    filtered_data = df[(df['Actual Date'] >= start_date) & (df['Actual Date'] <= end_date)]
+
+    # Filter Subs_Data based on date range
+    Subs_Data = Subs_Data[
+        (Subs_Data['Actual Date'] >= start_date) & (Subs_Data['Actual Date'] <= end_date)
+    ]
 
     # Filter the data based on Customer and Subscription selection
-    if 'All' in selected_customers:
-        selected_customers = df['Customer Name'].unique()
-    if 'All' in selected_subscriptions:
-        selected_subscriptions = df['type'].unique()
-
-    filtered_data = filtered_data[
-        (filtered_data['Customer Name'].isin(selected_customers)) & (filtered_data['type'].isin(selected_subscriptions))
+    if 'All' not in selected_customers:
+        Subs_Data = Subs_Data[
+            Subs_Data['Customer Name'].isin(selected_customers)
         ]
 
-    unique_types = filtered_data["type"].unique()
+    if 'All' not in selected_subscriptions:
+        Subs_Data = Subs_Data[
+            Subs_Data['type'].isin(selected_subscriptions)
+        ]
+
+    unique_types = Subs_Data["type"].unique()
     type_colors = {type_: f"#{hash(type_) % 16777215:06x}" for type_ in unique_types}
 
     # Create a Streamlit map using folium
     st.write("### Subscription Wise Geographical Insights")
-    m = folium.Map(location=[filtered_data['location.lat'].mean(), filtered_data['location.long'].mean()],
+    m = folium.Map(location=[Subs_Data['location.lat'].mean(), Subs_Data['location.long'].mean()],
                    zoom_start=10)
 
 
-    # Define a function to generate the HTML table for the popup
     def generate_popup_table(row):
         columns_to_show = [
-            "Actual Date", "Customer Name", "EPOD Name", "Actual OPERATOR NAME", "Duration",
-            "Day", "E-pod Arrival Time @ Session location", "Actual SoC_Start", "Actual Soc_End",
-            "Booking Session time", "Customer Location City", "canceled", "cancelledPenalty",
-            "t-15_kpi", "KWH Pumped Per Session"
+            "Customer Name", "EPOD Name", "Actual OPERATOR NAME", "t-15_kpi", "No. of Sessions", "Avg. Duration"
         ]
+
+        # Calculate the number of sessions and average duration for the current customer, subscription type, and location
+        customer_location_sessions = Subs_Data[
+            (Subs_Data['Customer Name'] == row["Customer Name"]) &
+            (Subs_Data['type'] == row["type"]) &
+            (Subs_Data['location.lat'].round(5) == round(row["location.lat"], 5)) &
+            (Subs_Data['location.long'].round(5) == round(row["location.long"], 5))
+            ]
+
+        num_sessions = customer_location_sessions.shape[0]
+        avg_duration = customer_location_sessions['Duration'].mean()
+
+        # Create the HTML table
         table_html = "<table style='border-collapse: collapse;'>"
         for col in columns_to_show:
-            table_html += f"<tr><td style='border: 1px solid black; padding: 5px;'><strong>{col}</strong></td><td style='border: 1px solid black; padding: 5px;'>{row[col]}</td></tr>"
+            if col == "No. of Sessions":
+                table_html += f"<tr><td style='border: 1px solid black; padding: 5px;'><strong>{col}</strong></td><td style='border: 1px solid black; padding: 5px;'>{num_sessions}</td></tr>"
+            elif col == "Avg. Duration":
+                table_html += f"<tr><td style='border: 1px solid black; padding: 5px;'><strong>{col}</strong></td><td style='border: 1px solid black; padding: 5px;'>{avg_duration:.2f} minutes</td></tr>"
+            else:
+                table_html += f"<tr><td style='border: 1px solid black; padding: 5px;'><strong>{col}</strong></td><td style='border: 1px solid black; padding: 5px;'>{row[col]}</td></tr>"
         table_html += "</table>"
         return table_html
 
 
+    # Maintain a set to track unique combinations
+    unique_combinations = set()
+
     # Add circle markers for each location with different colors based on the type
-    for index, row in filtered_data.iterrows():
+    for index, row in Subs_Data.iterrows():
         location_name = row["type"]
-        longitude = row["location.long"]
-        latitude = row["location.lat"]
+        longitude = round(row["location.long"], 5)
+        latitude = round(row["location.lat"], 5)
         color = type_colors[location_name]
 
-        # Creating the popup content with a table
-        popup_html = f"""
-                <strong>{location_name}</strong><br>
-                Latitude: {latitude}<br>
-                Longitude: {longitude}<br>
-                {generate_popup_table(row)}
-                """
+        # Round off the latitude and longitude to 5 decimal points
+        latitude_rounded = round(latitude, 5)
+        longitude_rounded = round(longitude, 5)
 
-        folium.CircleMarker(
-            location=[latitude, longitude],
-            radius=5,
-            popup=folium.Popup(popup_html, max_width=400),  # Use the created popup content
-            color=color,
-            fill=True,
-            fill_color=color,
-        ).add_to(m)
+        # Check if the combination is unique before processing
+        combination_key = (row["Customer Name"], row["type"], latitude_rounded, longitude_rounded)
+        if combination_key not in unique_combinations:
+            unique_combinations.add(combination_key)
+
+            # Calculate the number of sessions for the current customer, subscription type, and location
+            customer_location_sessions = Subs_Data[
+                (Subs_Data['Customer Name'] == row["Customer Name"]) &
+                (Subs_Data['type'] == row["type"]) &
+                (Subs_Data['location.lat'].round(5) == latitude_rounded) &
+                (Subs_Data['location.long'].round(5) == longitude_rounded)
+                ]
+
+            num_sessions = customer_location_sessions.shape[0]
+
+            # Creating the popup content with a table
+            popup_html = f"""
+                    <strong>{location_name}</strong><br>
+                    Latitude: {latitude_rounded}<br>
+                    Longitude: {longitude_rounded}<br>
+                    {generate_popup_table(row)}
+                    No. of Sessions: {num_sessions}
+                    """
+
+            folium.CircleMarker(
+                location=[latitude, longitude],
+                radius=5,
+                popup=folium.Popup(popup_html, max_width=400),  # Use the created popup content
+                color=color,
+                fill=True,
+                fill_color=color,
+            ).add_to(m)
+
+            print(
+                f"Customer: {row['Customer Name']}, Subscription: {row['type']}, Location: {row['location.lat']}, {row['location.long']}, No. of Sessions: {num_sessions}")
 
     # Calculate and display the most and least subscription types ("type") in columns
     with col6:
-        most_subscribed_type = filtered_data['type'].value_counts().idxmax()
+        most_subscribed_type = Subs_Data['type'].value_counts().idxmax()
         st.markdown("Most Subscribed Type")
         st.markdown("<span style='font-size: 25px; line-height: 0.7;'>{}</span>".format(most_subscribed_type),
                     unsafe_allow_html=True)
 
     with col7:
-        least_subscribed_type = filtered_data['type'].value_counts().idxmin()
+        least_subscribed_type = Subs_Data['type'].value_counts().idxmin()
         st.markdown("Least Subscribed Type")
         st.markdown("<span style='font-size: 25px; line-height: 0.7;'>{}</span>".format(least_subscribed_type),
                     unsafe_allow_html=True)
