@@ -332,6 +332,8 @@ df_month['Number'] = df_month['Number'].astype(str)
 df_month = df_month.merge(
     df_vehicles_month[['Number', 'Name']], on='Number', how='left')
 
+#df_month.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\scamui.csv")
+
 # Drop rows without a 'uid'
 df_month.dropna(subset=['uid'], inplace=True)
 
@@ -494,7 +496,7 @@ vehicle_df = vehicle_df[vehicle_df["Actual Date"].dt.year == 2023]
 
 vehicle_df.to_csv('melted.csv')
 
-
+#vehicle_df.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\sk.csv")
 
 
 #merged_df.to_csv(r"C:\Users\DELL\PycharmProjects\Excel\merdf2.csv")
@@ -1515,6 +1517,8 @@ with tab3:
     # Calculate average kilometers per session across all EPods
     avgkm = average_kms['KM Travelled for Session'].mean().round(2)
 
+    #filtered_data.to_csv(r"C:\Users\DELL\Downloads\finalstream\finalstream\Datavehocle.csv")
+
     # Display Average Kms/EPod
     with col4:
         st.markdown("Average Kms/EPod")
@@ -1793,7 +1797,7 @@ with tab3:
         with col4:
             st.markdown("Average Kms/EPod per Session")
             st.markdown("<span style='font-size: 25px;line-height: 0.8;'>" +
-                        str(round(average_kms['KM Travelled for Session'].mean(),2) + "</span>", unsafe_allow_html=True)
+                        str(round(average_kms['KM Travelled for Session'].mean(),2)) + "</span>", unsafe_allow_html=True)
 
         filtered_data['KWH Pumped Per Session'] = filtered_data['KWH Pumped Per Session'].replace(
             '', np.nan)
