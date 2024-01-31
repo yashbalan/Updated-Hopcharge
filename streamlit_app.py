@@ -473,11 +473,12 @@ def convert_vehicle_data(df):
 vehicle_data_list = [pivot_df, df_vehicles_month]
 melted_dfs = [convert_vehicle_data(df) for df in vehicle_data_list]
 vehicle_df = pd.concat(melted_dfs, ignore_index=True)
+vehicle_df = vehicle_df.dropna(subset=['KM Travelled for Session'])
 vehicle_df = vehicle_df[vehicle_df['Customer Location City'].isin(cities)]
 vehicle_df['KM Travelled for Session'] = vehicle_df['KM Travelled for Session'].replace(
     '-', '0', regex=True)
-vehicle_df["Actual Date"] = vehicle_df["Actual Date"].apply(
-    convert_to_datetime_with_current_year)
+vehicle_df["Actual Date"] = vehicle_df["Actual Date"].apply(convert_to_datetime_with_current_year)
+
 def convert_to_datetime_with_default_year(date_str, default_year):
     try:
         return pd.to_datetime(date_str, format='%d/%m').replace(year=default_year)
@@ -490,6 +491,8 @@ vehicle_df["Actual Date"] = vehicle_df["Actual Date"].apply(lambda x: convert_to
 
 # Filter data for the year 2023
 vehicle_df = vehicle_df[vehicle_df["Actual Date"].dt.year == 2023]
+
+vehicle_df.to_csv('melted.csv')
 
 
 
