@@ -1793,7 +1793,7 @@ with tab3:
         with col4:
             st.markdown("Average Kms/EPod per Session")
             st.markdown("<span style='font-size: 25px;line-height: 0.8;'>" +
-                        str(avgkm) + "</span>", unsafe_allow_html=True)
+                        str(round(average_kms['KM Travelled for Session'].mean(),2) + "</span>", unsafe_allow_html=True)
 
         filtered_data['KWH Pumped Per Session'] = filtered_data['KWH Pumped Per Session'].replace(
             '', np.nan)
