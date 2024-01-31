@@ -94,24 +94,6 @@ df_subs_nov = pd.DataFrame(load_monthly_data(nov_subs_file_path))
 # Concatenate June and July data for df_vehicles_month
 df_subs_month = pd.concat([df_subs_june, df_subs_july, df_subs_aug, df_subs_nov], ignore_index=True)
 
-def load_rank_data(file_path):
-    return pd.read_csv(file_path, encoding='latin1')
-
-# Load June data
-june_rank_file_path = r"Rank Data/June Rank Data.csv"
-df_rank_june = pd.DataFrame(load_rank_data(june_rank_file_path))
-
-# Load July data
-july_rank_file_path = r"Rank Data/July Rank.csv"
-df_rank_july = pd.DataFrame(load_rank_data(july_rank_file_path))
-
-# Load August data
-aug_rank_file_path = r"Rank Data/August Rank.csv"
-df_rank_aug = pd.DataFrame(load_rank_data(aug_rank_file_path))
-
-# Concatenate June and July data for the rank DataFrame
-df_rank = pd.concat([df_rank_june, df_rank_july, df_rank_aug], ignore_index=True)
-
 df_month.rename(
     columns={'Reach date ': 'Reach date'}, inplace=True)
 df2["Customer Name"] = df2["firstName"].str.cat(df2["lastName"], sep=" ")
