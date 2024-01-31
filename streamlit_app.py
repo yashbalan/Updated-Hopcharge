@@ -478,8 +478,18 @@ vehicle_df['KM Travelled for Session'] = vehicle_df['KM Travelled for Session'].
     '-', '0', regex=True)
 vehicle_df["Actual Date"] = vehicle_df["Actual Date"].apply(
     convert_to_datetime_with_current_year)
+def convert_to_datetime_with_default_year(date_str, default_year):
+    try:
+        return pd.to_datetime(date_str, format='%d/%m').replace(year=default_year)
+    except ValueError:
+        return pd.NaT
 
-vehicle_df.to_csv('melted.csv')
+# Convert "Actual Date" to datetime type with a default year (e.g., 2023)
+default_year = 2023
+vehicle_df["Actual Date"] = vehicle_df["Actual Date"].apply(lambda x: convert_to_datetime_with_default_year(x, default_year))
+
+# Filter data for the year 2023
+vehicle_df = vehicle_df[vehicle_df["Actual Date"].dt.year == 2023]
 
 
 
