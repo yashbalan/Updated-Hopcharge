@@ -49,9 +49,16 @@ df_nov = pd.DataFrame(load_monthly_data(nov_file_path))
 # Drop rows without a 'uid'
 df_nov.dropna(subset=['uid'], inplace=True)
 
+#Load December data
+dec_file_path = r"Roundtable Data/past_bookings_Dec23_v1.csv"
+df_dec = pd.DataFrame(load_monthly_data(dec_file_path))
+# Drop rows without a 'uid'
+df_dec.dropna(subset=['uid'], inplace=True)
+
+
 
 # Concatenate June and July data for df_month
-df_month = pd.concat([df_june, df_july, df_aug, df_nov], ignore_index=True)
+df_month = pd.concat([df_june, df_july, df_aug, df_nov, df_dec], ignore_index=True)
 
 
 # Load June vehicles data
@@ -87,12 +94,16 @@ df_subs_july = pd.DataFrame(load_monthly_data(july_subs_file_path))
 aug_subs_file_path = r"Subscription Data/possible_subscribers_Aug23.csv"
 df_subs_aug = pd.DataFrame(load_monthly_data(aug_subs_file_path))
 
-# Load August vehicles data
+# Load November vehicles data
 nov_subs_file_path = r"Subscription Data/possible_subscribers_Nov23.csv"
 df_subs_nov = pd.DataFrame(load_monthly_data(nov_subs_file_path))
 
+# Load December vehicles data
+dec_subs_file_path = r"Subscription Data/possible_subscribers_Dec23.csv"
+df_subs_dec = pd.DataFrame(load_monthly_data(dec_subs_file_path))
+
 # Concatenate June and July data for df_vehicles_month
-df_subs_month = pd.concat([df_subs_june, df_subs_july, df_subs_aug, df_subs_nov], ignore_index=True)
+df_subs_month = pd.concat([df_subs_june, df_subs_july, df_subs_aug, df_subs_nov, df_subs_dec], ignore_index=True)
 
 df_month.rename(
     columns={'Reach date ': 'Reach date'}, inplace=True)
